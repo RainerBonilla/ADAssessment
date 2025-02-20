@@ -6,10 +6,20 @@ import { TaskModule } from './task/task.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductModule } from './product/product.module';
+import { PassportModule } from '@nestjs/passport';
+import { UserModule } from './user/user.module';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtGuard } from './auth/guards/jwt.guard';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot(
+      { isGlobal: true }
+    ),
     ContentfulModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
         return {
@@ -29,8 +39,17 @@ import { ProductModule } from './product/product.module';
       inject: [ConfigService],
     }),
     TaskModule,
-    ProductModule],
-  controllers: [AppController],
-  providers: [AppService],
+    ProductModule,
+    UserModule,
+    AuthModule],
+  controllers: [AppController, AuthController],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard,
+    },
+    JwtStrategy,
+  ],
 })
 export class AppModule {}

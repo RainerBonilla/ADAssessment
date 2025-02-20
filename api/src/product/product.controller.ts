@@ -6,11 +6,13 @@ import { DeletedItemDTO } from './dtos/deletedItem.dto';
 import { ProductReportQueryDTO } from './dtos/productReportQuery.dto';
 import { PriceDateItemDTO } from './dtos/priceDateItem.dto';
 import { BrandReportQueryDTO } from './dtos/brandReportQuery.dto';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('product')
 export class ProductController {
     constructor(private productService: ProductService){}
 
+    @Public()
     @Get()
     async findAll(
         @Query() productDto: ProductDTO
@@ -22,6 +24,7 @@ export class ProductController {
         }
     };
 
+    @Public()
     @Get(':id')
     async findOne(@Param('id') id: string): Promise<Product> {
         try {
@@ -31,6 +34,7 @@ export class ProductController {
         }
     };
 
+    @Public()
     @Delete(':id')
     async deleteOne(@Param('id') id: string): Promise<boolean> {
         try {
