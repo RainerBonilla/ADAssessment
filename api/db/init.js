@@ -1,7 +1,6 @@
-db.createCollection('user');
+db.createCollection('users');
 db.user.insertOne({
-    username: 'admin',
-    password: 'assessment',
     email: 'test@test.com',
+    password: 'assessment',
     subscribedAt: new Date()
 });

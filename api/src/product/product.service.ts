@@ -81,7 +81,9 @@ export class ProductService {
             const match: PipelineStage = {
                 "$match": {
                     "$and": [
-                        {"price": {"$ne": null}},
+                        productPriceDate.price ?
+                            {"price": {"$ne": null}} : 
+                            {"price": null},
                         {"isDeleted": false},
                         {"creationDate": {
                                 "$gte": productPriceDate.dateMin,
@@ -128,7 +130,7 @@ export class ProductService {
         } catch (error) {
             throw new InternalServerErrorException(error.message);
         }
-    }
+    };
 
     async dumpProducts(products: Product[]): Promise<void> {
         try {
