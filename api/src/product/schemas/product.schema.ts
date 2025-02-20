@@ -33,7 +33,13 @@ export class Product {
     isDeleted: boolean;
 
     @Prop()
-    price?: number;
+    createdAt: string;
+
+    @Prop()
+    updatedAt: string;
+
+    @Prop()
+    price?: number; 
 };
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

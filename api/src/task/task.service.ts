@@ -40,7 +40,9 @@ export class TaskService {
                 price: product.fields.price as number,
                 currency: product.fields.currency as string,
                 stock: product.fields.stock as number,
-                isDeleted: false
+                isDeleted: false,
+                createdAt: product.sys.createdAt as string,
+                updatedAt: product.sys.updatedAt as string
             }
         });
     };
