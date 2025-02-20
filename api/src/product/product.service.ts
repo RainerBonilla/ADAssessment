@@ -1,9 +1,14 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Product } from './schemas/product.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, PipelineStage } from 'mongoose';
 import { ProductDTO } from './dtos/product.dto';
 import { queryPriceRangeBuilder, queryProductBuilder } from 'src/utils/builders';
+import { DeletedItemDTO } from './dtos/deletedItem.dto';
+import { deletedReportQuery } from './queries/deletedReportQuery';
+import { ProductReportQueryDTO } from './dtos/productReportQuery.dto';
+import { priceDateReportQuery } from './queries/priceDateReportQuery';
+import { PriceDateItemDTO } from './dtos/priceDateItem.dto';
 
 @Injectable()
 export class ProductService {
@@ -44,7 +49,7 @@ export class ProductService {
         } catch (error) {
             throw error;
         }
-    }
+    };
 
     async deleteOne(id: string): Promise<boolean> {
         try {
@@ -54,6 +59,70 @@ export class ProductService {
             return true;
         } catch (error) {
             throw error;
+        }
+    };
+
+    async deletedProductsReport(): Promise<DeletedItemDTO> {
+        try {
+            const res = await this.productModel.aggregate<DeletedItemDTO>(deletedReportQuery);
+
+            if(!res) throw new NotFoundException('could not find products to produce a report');
+            return res[0];
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    };
+
+    async priceDateRangeReport(productPriceDate: ProductReportQueryDTO): Promise<PriceDateItemDTO> {
+        try {
+            const totalCount = (await this.productModel.find()).length;
+            const match: PipelineStage = {
+                "$match": {
+                    "$and": [
+                        {"price": {"$ne": null}},
+                        {"isDeleted": false},
+                        {"creationDate": {
+                                "$gte": productPriceDate.dateMin,
+                                "$lt": productPriceDate.dateMax
+                            }
+                        }
+                    ]
+                }
+            };
+            const res = await this.productModel.aggregate(
+                priceDateReportQuery(
+                    totalCount,
+                    match
+                )
+            );
+            if(!res) throw new NotFoundException('could not find products to produce a report');
+            return res[0];
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    };
+
+    async brandReport(brand: string) {
+        try {
+            const totalCount = (await this.productModel.find()).length;
+            const match: PipelineStage = {
+                "$match": {
+                    "$and": [
+                        {"isDeleted": false},
+                        {"brand": brand}
+                    ]
+                }
+            };
+            const res = await this.productModel.aggregate(
+                priceDateReportQuery(
+                    totalCount,
+                    match
+                )
+            );
+            if(!res) throw new NotFoundException('could not find products to produce a report');
+            return res[0];
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
         }
     }
 
