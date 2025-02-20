@@ -75,7 +75,9 @@ export class ProductService {
 
     async priceDateRangeReport(productPriceDate: ProductReportQueryDTO): Promise<PriceDateItemDTO> {
         try {
-            const totalCount = (await this.productModel.find()).length;
+            const totalCount = (await this.productModel.find(
+                { "isDeleted": false }
+            )).length;
             const match: PipelineStage = {
                 "$match": {
                     "$and": [
@@ -104,7 +106,9 @@ export class ProductService {
 
     async brandReport(brand: string) {
         try {
-            const totalCount = (await this.productModel.find()).length;
+            const totalCount = (await this.productModel.find(
+                { "isDeleted": false }
+            )).length;
             const match: PipelineStage = {
                 "$match": {
                     "$and": [
