@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TaskService } from './task.service';
 import { ContentfulService } from '../contentful/contentful.service';
 import { ProductService } from '../product/product.service';
-import { Product } from '../product/schemas/product.schema';
 import { ProductSysSkeleton } from '../contentful/types/product.type';
 import { InternalServerErrorException } from '@nestjs/common';
 
@@ -42,37 +41,6 @@ const mockProductContentList: ProductSysSkeleton[] = [
       price: 435.7,
       stock: 15,
     },
-  },
-];
-
-const productMongoList: Product[] = [
-  {
-    sku: '1',
-    name: 'one',
-    brand: 'brand one',
-    model: 'model one',
-    category: 'cat one',
-    color: 'blue',
-    currency: 'USD',
-    price: 14.88,
-    stock: 33,
-    isDeleted: false,
-    createdAt: '2025-01-01T00:00:000Z',
-    updatedAt: '2025-01-01T00:00:000Z',
-  },
-  {
-    sku: '2',
-    name: 'two',
-    brand: 'brand two',
-    model: 'model two',
-    category: 'cat two',
-    color: 'yellow',
-    currency: 'USD',
-    price: 435.7,
-    stock: 15,
-    isDeleted: false,
-    createdAt: '2025-01-01T00:00:000Z',
-    updatedAt: '2025-01-01T00:00:000Z',
   },
 ];
 

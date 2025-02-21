@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   InternalServerErrorException,
   Param,
   Query,
@@ -26,7 +27,8 @@ export class ProductController {
     try {
       return this.productService.findAll(productDto);
     } catch (error) {
-      return error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -36,7 +38,8 @@ export class ProductController {
     try {
       return this.productService.findOne(id);
     } catch (error) {
-      return error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -46,7 +49,8 @@ export class ProductController {
     try {
       return this.productService.deleteOne(id);
     } catch (error) {
-      return error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -56,7 +60,8 @@ export class ProductController {
     try {
       return this.productService.deletedProductsReport();
     } catch (error) {
-      return error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -68,7 +73,8 @@ export class ProductController {
     try {
       return this.productService.priceDateRangeReport(productPriceRange);
     } catch (error) {
-      return error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -80,7 +86,8 @@ export class ProductController {
     try {
       return this.productService.brandReport(productBrand.brand);
     } catch (error) {
-      return error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 }

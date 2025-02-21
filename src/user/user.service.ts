@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -19,7 +23,8 @@ export class UserService {
       if (!gotUser) return undefined;
       return gotUser;
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -29,7 +34,8 @@ export class UserService {
       if (!newUser) return false;
       return true;
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 }

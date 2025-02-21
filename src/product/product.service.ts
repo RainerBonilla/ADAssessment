@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -41,7 +42,8 @@ export class ProductService {
 
       return products;
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -51,7 +53,8 @@ export class ProductService {
       if (!product) throw new NotFoundException('product not found');
       return product;
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -64,7 +67,8 @@ export class ProductService {
 
       return true;
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -79,7 +83,8 @@ export class ProductService {
         );
       return res[0];
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
@@ -103,7 +108,7 @@ export class ProductService {
           ],
         },
       };
-      const res = await this.productModel.aggregate(
+      const res: PriceDateItemDTO[] = await this.productModel.aggregate(
         priceDateReportQuery(totalCount, match),
       );
       if (!res)
@@ -116,7 +121,7 @@ export class ProductService {
     }
   }
 
-  async brandReport(brand: string) {
+  async brandReport(brand: string): Promise<PriceDateItemDTO> {
     try {
       const totalCount = (await this.productModel.find({ isDeleted: false }))
         .length;
@@ -125,7 +130,7 @@ export class ProductService {
           $and: [{ isDeleted: false }, { brand: brand }],
         },
       };
-      const res = await this.productModel.aggregate(
+      const res: PriceDateItemDTO[] = await this.productModel.aggregate(
         priceDateReportQuery(totalCount, match),
       );
       if (!res)

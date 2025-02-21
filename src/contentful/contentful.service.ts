@@ -20,7 +20,9 @@ export class ContentfulService {
 
       return res.items;
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(
+        error.message ?? 'something happened',
+      );
     }
   }
 }
