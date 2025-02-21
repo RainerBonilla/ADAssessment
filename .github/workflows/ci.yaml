@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main", "develop" ]
 
@@ -26,10 +26,7 @@ jobs:
         run: npm run test:cov
 
       - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
+        run: npm run lint
           
       - name: Upload code coverage for ref branch
         uses: actions/upload-artifact@v4
