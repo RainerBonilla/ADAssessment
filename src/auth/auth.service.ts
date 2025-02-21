@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -28,14 +29,15 @@ export class AuthService {
 
       return gotUser;
     } catch (error) {
-      throw error;
+      if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException('something happened');
     }
   }
 
-  async login(user: UserDTO): Promise<AccessTokenDTO> {
+  login(user: UserDTO): Promise<AccessTokenDTO> {
     const payload = { email: user.email };
 
-    return { accessToken: this.jwtService.sign(payload) };
+    return Promise.resolve({ accessToken: this.jwtService.sign(payload) });
   }
 
   async register(user: UserDTO): Promise<AccessTokenDTO> {

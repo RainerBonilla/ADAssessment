@@ -13,19 +13,11 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Body() user: UserDTO): Promise<AccessTokenDTO> {
-    try {
-      return this.authService.login(user);
-    } catch (error) {
-      return error;
-    }
+    return this.authService.login(user);
   }
 
   @Post('register')
   async register(@Body() newUser: UserDTO): Promise<AccessTokenDTO> {
-    try {
-      return await this.authService.register(newUser);
-    } catch (error) {
-      return error;
-    }
+    return await this.authService.register(newUser);
   }
 }

@@ -9,9 +9,7 @@ import { TaskModule } from './task/task.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductModule } from './product/product.module';
-import { PassportModule } from '@nestjs/passport';
 import { UserModule } from './user/user.module';
-import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
@@ -33,7 +31,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_URI'),
         dbName: configService.get<string>('MONGO_INITDB_DATABASE'),
       }),
