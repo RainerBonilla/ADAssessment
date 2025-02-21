@@ -2,8 +2,8 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccessTokenDTO } from './dtos/accessToken.dto';
-import { UserDTO } from 'src/user/dtos/user.dto';
-import { Public } from 'src/decorators/public.decorator';
+import { UserDTO } from '../user/dtos/user.dto';
+import { Public } from '../decorators/public.decorator';
 
 @Public()
 @Controller('auth')

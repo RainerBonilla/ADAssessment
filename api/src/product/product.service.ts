@@ -3,7 +3,7 @@ import { Product } from './schemas/product.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PipelineStage } from 'mongoose';
 import { ProductDTO } from './dtos/product.dto';
-import { queryPriceRangeBuilder, queryProductBuilder } from 'src/utils/builders';
+import { queryPriceRangeBuilder, queryProductBuilder } from '../utils/builders';
 import { DeletedItemDTO } from './dtos/deletedItem.dto';
 import { deletedReportQuery } from './queries/deletedReportQuery';
 import { ProductReportQueryDTO } from './dtos/productReportQuery.dto';
@@ -69,7 +69,7 @@ export class ProductService {
             if(!res) throw new NotFoundException('could not find products to produce a report');
             return res[0];
         } catch (error) {
-            throw new InternalServerErrorException(error.message);
+            throw error;
         }
     };
 
