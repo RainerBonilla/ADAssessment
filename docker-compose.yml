@@ -1,0 +1,49 @@
+services:
+  nest-app:
+    build: .
+    image: nest-app
+    env_file: .env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - database
+    volumes:
+      - .:/src
+      - server-volume:/server/node_modules
+    networks:
+      clusternetwork:
+        ipv4_address: 172.16.0.13
+
+  database:
+    image: database:1.0.0
+    container_name: 'mongo-db'
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    volumes:
+      - database-volume:/data/db
+    networks:
+      clusternetwork:
+        ipv4_address: 172.16.0.14
+
+volumes:
+  server-volume:
+    name: "server-volume"
+  database-volume:
+    name: "database-volume"
+
+networks:
+  clusternetwork:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/24
+
