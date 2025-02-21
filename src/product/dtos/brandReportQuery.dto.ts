@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class BrandReportQueryDTO {
-    @ApiProperty()
-    brand: string;
-};
+  @ApiProperty()
+  brand: string;
+}

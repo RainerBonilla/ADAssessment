@@ -1,3 +1,3 @@
 export class CheckUserDTO {
-    email: string;
-};
+  email: string;
+}

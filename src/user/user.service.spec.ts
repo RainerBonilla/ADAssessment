@@ -5,8 +5,8 @@ import { User } from './schemas/user.schema';
 import { Model, Query } from 'mongoose';
 
 const mockedUser = {
-  email: "test@test.com",
-  password: "awwwq1"
+  email: 'test@test.com',
+  password: 'awwwq1',
 };
 
 describe('UserService', () => {
@@ -19,14 +19,13 @@ describe('UserService', () => {
   };
 
   beforeEach(async () => {
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
         {
           provide: getModelToken(User.name),
-          useValue: mockUserService
-        }
+          useValue: mockUserService,
+        },
       ],
     }).compile();
 
@@ -40,7 +39,9 @@ describe('UserService', () => {
 
   describe('findOne', () => {
     it('it should return user', async () => {
-      jest.spyOn(model, 'findOne').mockReturnThis()
+      jest
+        .spyOn(model, 'findOne')
+        .mockReturnThis()
         .mockReturnValue({
           exec: jest.fn().mockResolvedValueOnce(mockedUser),
         } as unknown as Query<User, any>);
@@ -56,7 +57,9 @@ describe('UserService', () => {
     });
 
     it('it should return undefined', async () => {
-      jest.spyOn(model, 'findOne').mockReturnThis()
+      jest
+        .spyOn(model, 'findOne')
+        .mockReturnThis()
         .mockReturnValue({
           exec: jest.fn().mockResolvedValueOnce(undefined),
         } as unknown as Query<User, any>);
@@ -69,7 +72,9 @@ describe('UserService', () => {
 
   describe('insertOne', () => {
     it('it should return true if inserted', async () => {
-      model.insertOne = jest.fn().mockImplementationOnce(() => Promise.resolve(mockedUser));
+      model.insertOne = jest
+        .fn()
+        .mockImplementationOnce(() => Promise.resolve(mockedUser));
 
       const result = await userService.insertOne(mockedUser);
 
@@ -77,7 +82,9 @@ describe('UserService', () => {
     });
 
     it('it should return false if not inserted', async () => {
-      model.insertOne = jest.fn().mockImplementationOnce(() => Promise.resolve(undefined));
+      model.insertOne = jest
+        .fn()
+        .mockImplementationOnce(() => Promise.resolve(undefined));
 
       const result = await userService.insertOne(mockedUser);
 

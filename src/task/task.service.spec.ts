@@ -10,8 +10,8 @@ const mockProductContentList: ProductSysSkeleton[] = [
   {
     contentTypeId: 'product',
     sys: {
-      createdAt: "2025-01-01T00:00:000Z",
-      updatedAt: "2025-01-01T00:00:000Z"
+      createdAt: '2025-01-01T00:00:000Z',
+      updatedAt: '2025-01-01T00:00:000Z',
     },
     fields: {
       sku: '1',
@@ -23,13 +23,13 @@ const mockProductContentList: ProductSysSkeleton[] = [
       currency: 'USD',
       price: 14.88,
       stock: 33,
-    }
+    },
   },
   {
     contentTypeId: 'product',
     sys: {
-      createdAt: "2025-01-01T00:00:000Z",
-      updatedAt: "2025-01-01T00:00:000Z"
+      createdAt: '2025-01-01T00:00:000Z',
+      updatedAt: '2025-01-01T00:00:000Z',
     },
     fields: {
       sku: '2',
@@ -39,10 +39,10 @@ const mockProductContentList: ProductSysSkeleton[] = [
       category: 'cat two',
       color: 'yellow',
       currency: 'USD',
-      price: 435.70,
+      price: 435.7,
       stock: 15,
-    }
-  }
+    },
+  },
 ];
 
 const productMongoList: Product[] = [
@@ -58,7 +58,7 @@ const productMongoList: Product[] = [
     stock: 33,
     isDeleted: false,
     createdAt: '2025-01-01T00:00:000Z',
-    updatedAt: '2025-01-01T00:00:000Z'
+    updatedAt: '2025-01-01T00:00:000Z',
   },
   {
     sku: '2',
@@ -68,12 +68,12 @@ const productMongoList: Product[] = [
     category: 'cat two',
     color: 'yellow',
     currency: 'USD',
-    price: 435.70,
+    price: 435.7,
     stock: 15,
     isDeleted: false,
     createdAt: '2025-01-01T00:00:000Z',
-    updatedAt: '2025-01-01T00:00:000Z'
-  }
+    updatedAt: '2025-01-01T00:00:000Z',
+  },
 ];
 
 describe('TaskService', () => {
@@ -87,7 +87,7 @@ describe('TaskService', () => {
 
   const mockProductService = {
     cleanAll: jest.fn(),
-    dumpProducts: jest.fn()
+    dumpProducts: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -96,11 +96,11 @@ describe('TaskService', () => {
         TaskService,
         {
           provide: ContentfulService,
-          useValue: mockContentService
+          useValue: mockContentService,
         },
         {
           provide: ProductService,
-          useValue: mockProductService
+          useValue: mockProductService,
         },
       ],
     }).compile();
@@ -114,12 +114,12 @@ describe('TaskService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('transformProducts', () =>{
+  describe('transformProducts', () => {
     it('should transform products from content api to mongodb', () => {
       const res = service.transformProducts(mockProductContentList);
 
       expect(res).toHaveLength(2);
-      
+
       expect(res[0].sku).toBe('1');
       expect(res[1].sku).toBe('2');
     });
@@ -127,7 +127,9 @@ describe('TaskService', () => {
 
   describe('fetchContenfulData', () => {
     it('should run the cron job with all the logic', async () => {
-      contentService.getProducts = jest.fn().mockImplementationOnce(() => mockProductContentList);
+      contentService.getProducts = jest
+        .fn()
+        .mockImplementationOnce(() => mockProductContentList);
 
       await service.fetchContenfulData();
 
@@ -138,17 +140,16 @@ describe('TaskService', () => {
 
     it('should throw error if something happened', async () => {
       contentService.getProducts = jest.fn().mockImplementationOnce(() => {
-        throw new Error()
+        throw new Error();
       });
-      
+
       try {
         await service.fetchContenfulData();
       } catch (error) {
         expect(error).toBeInstanceOf(InternalServerErrorException);
-      };
+      }
 
       expect(contentService.getProducts).toHaveBeenCalled();
     });
   });
-
 });

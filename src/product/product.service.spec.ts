@@ -3,7 +3,10 @@ import { ProductService } from './product.service';
 import { Product } from './schemas/product.schema';
 import { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
-import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { queryPriceRangeBuilder, queryProductBuilder } from '../utils/builders';
 import { priceDateReportQuery } from './queries/priceDateReportQuery';
 
@@ -19,7 +22,7 @@ const mockedProductList: Product[] = [
     stock: 33,
     isDeleted: false,
     createdAt: '2025-01-01T00:00:000Z',
-    updatedAt: '2025-01-01T00:00:000Z'
+    updatedAt: '2025-01-01T00:00:000Z',
   },
   {
     sku: '2',
@@ -32,13 +35,12 @@ const mockedProductList: Product[] = [
     stock: 15,
     isDeleted: false,
     createdAt: '2025-01-01T00:00:000Z',
-    updatedAt: '2025-01-01T00:00:000Z'
-  }
+    updatedAt: '2025-01-01T00:00:000Z',
+  },
 ];
 
 jest.mock('../utils/builders');
 jest.mock('./queries/priceDateReportQuery');
-
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -50,7 +52,7 @@ describe('ProductService', () => {
     deleteOne: jest.fn(),
     deletedProductsReport: jest.fn(),
     priceDateRangeReport: jest.fn(),
-    brandReport: jest.fn()
+    brandReport: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -59,8 +61,8 @@ describe('ProductService', () => {
         ProductService,
         {
           provide: getModelToken(Product.name),
-          useValue: mockProductService
-        }
+          useValue: mockProductService,
+        },
       ],
     }).compile();
 
@@ -77,9 +79,9 @@ describe('ProductService', () => {
       model.find = jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
           limit: jest.fn().mockReturnValue({
-            exec: () => mockedProductList
-          })
-        })
+            exec: () => mockedProductList,
+          }),
+        }),
       });
 
       (queryPriceRangeBuilder as jest.Mock).mockReturnValue({});
@@ -94,15 +96,15 @@ describe('ProductService', () => {
       model.find = jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
           limit: jest.fn().mockReturnValue({
-            exec: () => [mockedProductList[0]]
-          })
-        })
+            exec: () => [mockedProductList[0]],
+          }),
+        }),
       });
 
       (queryPriceRangeBuilder as jest.Mock).mockReturnValue({});
-      (queryProductBuilder as jest.Mock).mockReturnValue({sku: '1'});
+      (queryProductBuilder as jest.Mock).mockReturnValue({ sku: '1' });
 
-      const result = await service.findAll({sku: '1'});
+      const result = await service.findAll({ sku: '1' });
 
       expect(result).toHaveLength(1);
 
@@ -114,16 +116,16 @@ describe('ProductService', () => {
       model.find = jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
           limit: jest.fn().mockReturnValue({
-            exec: () => []
-          })
-        })
+            exec: () => [],
+          }),
+        }),
       });
 
       (queryPriceRangeBuilder as jest.Mock).mockReturnValue({});
-      (queryProductBuilder as jest.Mock).mockReturnValue({sku: '99'});
+      (queryProductBuilder as jest.Mock).mockReturnValue({ sku: '99' });
 
       try {
-        await service.findAll({sku: '99'});
+        await service.findAll({ sku: '99' });
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
       }
@@ -133,9 +135,9 @@ describe('ProductService', () => {
   describe('findOne', () => {
     it('should find one product', async () => {
       model.findById = jest.fn().mockReturnValue({
-        exec: () => mockedProductList[0]
+        exec: () => mockedProductList[0],
       });
-        
+
       const res = await service.findOne('22323dsdc');
 
       expect(res).toBeDefined();
@@ -144,7 +146,7 @@ describe('ProductService', () => {
 
     it('should throw error when not found', async () => {
       model.findById = jest.fn().mockReturnValue({
-        exec: () => {}
+        exec: () => {},
       });
 
       try {
@@ -158,9 +160,9 @@ describe('ProductService', () => {
   describe('deleteOne', () => {
     it('should delete one product', async () => {
       model.findByIdAndUpdate = jest.fn().mockReturnValue({
-        exec: () => mockedProductList[0]
+        exec: () => mockedProductList[0],
       });
-        
+
       const res = await service.deleteOne('22323dsdc');
 
       expect(res).toBeDefined();
@@ -169,7 +171,7 @@ describe('ProductService', () => {
 
     it('should throw error when not found', async () => {
       model.findByIdAndUpdate = jest.fn().mockReturnValue({
-        exec: () => {}
+        exec: () => {},
       });
 
       try {
@@ -182,20 +184,20 @@ describe('ProductService', () => {
 
   describe('deletedProductsReport', () => {
     it('bring list of deleted reports', async () => {
-      model.aggregate = jest.fn().mockImplementationOnce(() => Promise.resolve(
-        [
+      model.aggregate = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve([
           {
             isDeleted: true,
             total: 14,
-            percentage: 55.553420
+            percentage: 55.55342,
           },
           {
             isDeleted: false,
             total: 13,
-            percentage: 44.553420
-          }
-        ]
-      ));
+            percentage: 44.55342,
+          },
+        ]),
+      );
 
       const res = await service.deletedProductsReport();
 
@@ -205,8 +207,9 @@ describe('ProductService', () => {
     });
 
     it('throw error when query fails', async () => {
-      model.aggregate = jest.fn().mockImplementationOnce(() => Promise.resolve([]
-      ));
+      model.aggregate = jest
+        .fn()
+        .mockImplementationOnce(() => Promise.resolve([]));
 
       try {
         await service.deletedProductsReport();
@@ -214,7 +217,6 @@ describe('ProductService', () => {
         expect(error).toBeInstanceOf(NotFoundException);
       }
       expect(model.aggregate).toHaveBeenCalled();
-      
     });
   });
 
@@ -222,20 +224,20 @@ describe('ProductService', () => {
     it('bring list of non deleted report', async () => {
       (priceDateReportQuery as jest.Mock).mockReturnValueOnce([
         {
-          "$sort": {
-              "matched": -1 as any
-          }
-        }
+          $sort: {
+            matched: -1 as any,
+          },
+        },
       ]);
       model.find = jest.fn().mockReturnValue(mockedProductList);
-      model.aggregate = jest.fn().mockImplementationOnce(() => Promise.resolve(
-        [
+      model.aggregate = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve([
           {
             total: 18,
-            percentage: 55.553420
-          }
-        ]
-      ));
+            percentage: 55.55342,
+          },
+        ]),
+      );
 
       const res = await service.priceDateRangeReport({
         price: true,
@@ -251,13 +253,15 @@ describe('ProductService', () => {
     it('throw error when query fails', async () => {
       (priceDateReportQuery as jest.Mock).mockReturnValueOnce([
         {
-          "$sort": {
-              "matched": -1 as any
-          }
-        }
+          $sort: {
+            matched: -1 as any,
+          },
+        },
       ]);
       model.find = jest.fn().mockReturnValue(mockedProductList);
-      model.aggregate = jest.fn().mockImplementationOnce(() => Promise.resolve([]));
+      model.aggregate = jest
+        .fn()
+        .mockImplementationOnce(() => Promise.resolve([]));
 
       try {
         await service.priceDateRangeReport({
@@ -269,7 +273,6 @@ describe('ProductService', () => {
         expect(error).toBeInstanceOf(NotFoundException);
       }
       expect(model.aggregate).toHaveBeenCalled();
-      
     });
   });
 
@@ -277,20 +280,20 @@ describe('ProductService', () => {
     it('bring list of non deleted by brand report', async () => {
       (priceDateReportQuery as jest.Mock).mockReturnValueOnce([
         {
-          "$sort": {
-              "matched": -1 as any
-          }
-        }
+          $sort: {
+            matched: -1 as any,
+          },
+        },
       ]);
       model.find = jest.fn().mockReturnValue(mockedProductList);
-      model.aggregate = jest.fn().mockImplementationOnce(() => Promise.resolve(
-        [
+      model.aggregate = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve([
           {
             total: 18,
-            percentage: 55.553420
-          }
-        ]
-      ));
+            percentage: 55.55342,
+          },
+        ]),
+      );
 
       const res = await service.brandReport('brand one');
 
@@ -302,13 +305,15 @@ describe('ProductService', () => {
     it('throw error when query fails', async () => {
       (priceDateReportQuery as jest.Mock).mockReturnValueOnce([
         {
-          "$sort": {
-              "matched": -1 as any
-          }
-        }
+          $sort: {
+            matched: -1 as any,
+          },
+        },
       ]);
       model.find = jest.fn().mockReturnValue(mockedProductList);
-      model.aggregate = jest.fn().mockImplementationOnce(() => Promise.resolve([]));
+      model.aggregate = jest
+        .fn()
+        .mockImplementationOnce(() => Promise.resolve([]));
 
       try {
         await service.brandReport('brand three');
@@ -316,7 +321,6 @@ describe('ProductService', () => {
         expect(error).toBeInstanceOf(NotFoundException);
       }
       expect(model.aggregate).toHaveBeenCalled();
-      
     });
   });
 

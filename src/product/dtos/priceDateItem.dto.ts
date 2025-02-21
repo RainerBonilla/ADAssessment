@@ -1,4 +1,4 @@
 export class PriceDateItemDTO {
-    total: number;
-    percentage: number;
-};
+  total: number;
+  percentage: number;
+}

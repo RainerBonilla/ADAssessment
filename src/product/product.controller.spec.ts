@@ -21,9 +21,9 @@ describe('ProductController', () => {
       providers: [
         {
           provide: ProductService,
-          useValue: mockService
-        }
-      ]
+          useValue: mockService,
+        },
+      ],
     }).compile();
 
     controller = module.get<ProductController>(ProductController);

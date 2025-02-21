@@ -15,7 +15,7 @@ const mockProductContentList = [
       color: 'blue',
       currency: 'USD',
       stock: 33,
-    }
+    },
   },
   {
     contentTypeId: 'product',
@@ -28,8 +28,8 @@ const mockProductContentList = [
       color: 'yellow',
       currency: 'USD',
       stock: 15,
-    }
-  }
+    },
+  },
 ];
 
 describe('ContentfulService', () => {
@@ -46,8 +46,8 @@ describe('ContentfulService', () => {
         ContentfulService,
         {
           provide: 'CONTENTFUL_CLIENT',
-          useValue: mockContentfulClient
-        }
+          useValue: mockContentfulClient,
+        },
       ],
     }).compile();
 
@@ -61,10 +61,11 @@ describe('ContentfulService', () => {
 
   describe('getProducts', () => {
     it('should return dump from contentful', async () => {
-      client.getEntries = jest.fn().mockImplementationOnce(() => Promise.resolve({
-        items: mockProductContentList
-      }
-      ));
+      client.getEntries = jest.fn().mockImplementationOnce(() =>
+        Promise.resolve({
+          items: mockProductContentList,
+        }),
+      );
 
       const res = await service.getProducts();
 
@@ -82,7 +83,7 @@ describe('ContentfulService', () => {
         await service.getProducts();
       } catch (error) {
         expect(error).toBeInstanceOf(InternalServerErrorException);
-      };
+      }
 
       expect(client.getEntries).toHaveBeenCalled();
     });

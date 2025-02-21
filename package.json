@@ -53,7 +53,6 @@
     "@types/node": "^22.10.7",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",
-    "contentful-cli": "^3.7.3",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",

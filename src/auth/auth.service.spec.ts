@@ -4,7 +4,11 @@ import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/schemas/user.schema';
-import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 const mockUser: User = {
   email: 'test@test.com',
@@ -12,7 +16,7 @@ const mockUser: User = {
 };
 
 const token = {
-  accessToken: '12sndcee4Gsdsdn3rrrqwww1'
+  accessToken: '12sndcee4Gsdsdn3rrrqwww1',
 };
 
 const hashedPass = 'ww2wddf342ssafH!wwweff';
@@ -39,11 +43,11 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: UserService,
-          useValue: mockUserService
+          useValue: mockUserService,
         },
         {
           provide: JwtService,
-          useValue: mockJwtService
+          useValue: mockJwtService,
         },
       ],
     }).compile();
@@ -77,7 +81,7 @@ describe('AuthService', () => {
         await service.validate(mockUser);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-      };
+      }
 
       expect(userService.findOne).toHaveBeenCalled();
     });
@@ -90,7 +94,7 @@ describe('AuthService', () => {
         await service.validate(mockUser);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-      };
+      }
 
       expect(userService.findOne).toHaveBeenCalled();
     });
@@ -134,8 +138,8 @@ describe('AuthService', () => {
         await service.register(mockUser);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-      };
-      
+      }
+
       expect(userService.findOne).toHaveBeenCalled();
     });
 
@@ -149,8 +153,8 @@ describe('AuthService', () => {
         await service.register(mockUser);
       } catch (error) {
         expect(error).toBeInstanceOf(InternalServerErrorException);
-      };
-      
+      }
+
       expect(userService.findOne).toHaveBeenCalled();
       expect(userService.insertOne).toHaveBeenCalled();
     });

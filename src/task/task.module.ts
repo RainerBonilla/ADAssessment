@@ -6,10 +6,6 @@ import { ProductModule } from 'src/product/product.module';
 
 @Module({
   providers: [TaskService],
-  imports: [
-    ScheduleModule.forRoot(),
-    ContentfulModule,
-    ProductModule
-  ],
+  imports: [ScheduleModule.forRoot(), ContentfulModule, ProductModule],
 })
-export class TaskModule {};
+export class TaskModule {}

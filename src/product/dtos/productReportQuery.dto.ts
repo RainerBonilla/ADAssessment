@@ -1,10 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ProductReportQueryDTO {
-    @ApiProperty()
-    price: boolean;
-    @ApiProperty()
-    dateMin: string;
-    @ApiProperty()
-    dateMax: string;
-};
+  @ApiProperty()
+  price: boolean;
+  @ApiProperty()
+  dateMin: string;
+  @ApiProperty()
+  dateMax: string;
+}
