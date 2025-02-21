@@ -7,6 +7,7 @@ import { ProductReportQueryDTO } from './dtos/productReportQuery.dto';
 import { PriceDateItemDTO } from './dtos/priceDateItem.dto';
 import { BrandReportQueryDTO } from './dtos/brandReportQuery.dto';
 import { Public } from '../decorators/public.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('product')
 export class ProductController {
@@ -44,6 +45,7 @@ export class ProductController {
         }
     };
 
+    @ApiBearerAuth()
     @Get('/reports/deleted')
     async reportDeleted(): Promise<DeletedItemDTO> {
         try {
@@ -53,6 +55,7 @@ export class ProductController {
         }
     }
 
+    @ApiBearerAuth()
     @Get('/reports/price-date')
     async reportPriceDateRange(
         @Query() productPriceRange: ProductReportQueryDTO
@@ -64,6 +67,7 @@ export class ProductController {
         }
     };
 
+    @ApiBearerAuth()
     @Get('/reports/brand')
     async reportBrand(
         @Query() productBrand: BrandReportQueryDTO
