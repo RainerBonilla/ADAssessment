@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Entry } from 'contentful';
-import { ContentfulService } from 'src/contentful/contentful.service';
-import { ProductSkeleton } from 'src/contentful/types/product.type';
-import { ProductService } from 'src/product/product.service';
-import { Product } from 'src/product/schemas/product.schema';
+import { ContentfulService } from '../contentful/contentful.service';
+import { ProductSkeleton, ProductSysSkeleton } from '../contentful/types/product.type';
+import { ProductService } from '../product/product.service';
+import { Product } from '../product/schemas/product.schema';
 
 @Injectable()
 export class TaskService {
@@ -28,7 +28,10 @@ export class TaskService {
         }
     };
 
-    private transformProducts(products: Entry<ProductSkeleton>[]): Product[] {
+    transformProducts(
+        products: Entry<ProductSkeleton>[] |
+        ProductSysSkeleton[]
+    ): Product[] {
         return products.map(product => {
             return {
                 sku: product.fields.sku as string,

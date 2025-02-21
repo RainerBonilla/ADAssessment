@@ -6,7 +6,7 @@ import { DeletedItemDTO } from './dtos/deletedItem.dto';
 import { ProductReportQueryDTO } from './dtos/productReportQuery.dto';
 import { PriceDateItemDTO } from './dtos/priceDateItem.dto';
 import { BrandReportQueryDTO } from './dtos/brandReportQuery.dto';
-import { Public } from 'src/decorators/public.decorator';
+import { Public } from '../decorators/public.decorator';
 
 @Controller('product')
 export class ProductController {

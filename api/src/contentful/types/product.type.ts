@@ -13,4 +13,23 @@ export type ProductSkeleton = {
         currency: Contentful.EntryFieldTypes.Text,
         stock: Contentful.EntryFieldTypes.Integer
   }
-}
+};
+
+export type ProductSysSkeleton = {
+  contentTypeId: 'product',
+  sys: {
+    createdAt: Contentful.EntryFieldTypes.Date | string,
+    updatedAt: Contentful.EntryFieldTypes.Date | string,
+  },
+  fields: {
+      sku: Contentful.EntryFieldTypes.Text | string,
+      name: Contentful.EntryFieldTypes.Text | string,
+      brand: Contentful.EntryFieldTypes.Text | string,
+      model: Contentful.EntryFieldTypes.Text | string,
+      category: Contentful.EntryFieldTypes.Text | string,
+      color: Contentful.EntryFieldTypes.Text | string,
+      price: Contentful.EntryFieldTypes.Number | number,
+      currency: Contentful.EntryFieldTypes.Text | string,
+      stock: Contentful.EntryFieldTypes.Integer | number
+  }
+};

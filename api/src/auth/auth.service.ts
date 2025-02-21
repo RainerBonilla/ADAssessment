@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserDTO } from 'src/user/dtos/user.dto';
-import { User } from 'src/user/schemas/user.schema';
-import { UserService } from 'src/user/user.service';
+import { UserDTO } from '../user/dtos/user.dto';
+import { User } from '../user/schemas/user.schema';
+import { UserService } from '../user/user.service';
 import { AccessTokenDTO } from './dtos/accessToken.dto';
 
 @Injectable()
